@@ -4,11 +4,11 @@ from datetime import datetime
 from .database import Base
 import uuid
 
-# Many-to-many table
 athlete_video_table = Table(
-    'athlete_video', Base.metadata,
-    Column('athlete_id', ForeignKey('athletes.id'), primary_key=True),
-    Column('video_id', ForeignKey('videos.id'), primary_key=True)
+    "athlete_video",
+    Base.metadata,
+    Column("athlete_id", ForeignKey("athletes.id"), primary_key=True),
+    Column("video_id", ForeignKey("videos.id"), primary_key=True),
 )
 
 class Athlete(Base):
