@@ -1,58 +1,26 @@
 import { Routes, Route } from 'react-router-dom';
 import LoginForm from './components/LoginForm';
 import Dashboard from './components/Dashboard';
+import UploadForm from './components/UploadForm';
+import MetricForm from './components/MetricForm';
 import PrivateRoute from './routes/PrivateRoute';
-import './App.css'
-
+import Layout from './components/Layout';
+import './App.css';
 
 const App = () => {
   return (
     <Routes>
+      {/* Public route */}
       <Route path="/login" element={<LoginForm />} />
-      <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+
+      {/* Protected routes with shared layout */}
+      <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/upload" element={<UploadForm />} />
+        <Route path="/metrics" element={<MetricForm />} />
+      </Route>
     </Routes>
   );
 };
 
 export default App;
-
-
-
-
-
-
-// import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-// import './App.css'
-
-// function App() {
-//   const [count, setCount] = useState(0)
-
-//   return (
-//     <>
-//       <div>
-//         <a href="https://vite.dev" target="_blank">
-//           <img src={viteLogo} className="logo" alt="Vite logo" />
-//         </a>
-//         <a href="https://react.dev" target="_blank">
-//           <img src={reactLogo} className="logo react" alt="React logo" />
-//         </a>
-//       </div>
-//       <h1>Vite + React</h1>
-//       <div className="card">
-//         <button onClick={() => setCount((count) => count + 1)}>
-//           count is {count}
-//         </button>
-//         <p>
-//           Edit <code>src/App.tsx</code> and save to test HMR
-//         </p>
-//       </div>
-//       <p className="read-the-docs">
-//         Click on the Vite and React logos to learn more
-//       </p>
-//     </>
-//   )
-// }
-
-// export default App

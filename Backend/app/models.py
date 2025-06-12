@@ -19,7 +19,6 @@ class Athlete(Base):
     age = Column(Integer)
     created_at = Column(DateTime, default=datetime.utcnow)
     videos = relationship("Video", secondary=athlete_video_table, back_populates="athletes")
-    metrics = relationship("PerformanceMetric", back_populates="athlete")
 
 class Video(Base):
     __tablename__ = "videos"
@@ -29,7 +28,7 @@ class Video(Base):
     duration = Column(Float)
     status = Column(String, default="Processing")
     athletes = relationship("Athlete", secondary=athlete_video_table, back_populates="videos")
-    metrics = relationship("PerformanceMetric", back_populates="video")
+    metrics = relationship("PerformanceMetric", back_populates="video", cascade="all, delete-orphan")
 
 class PerformanceMetric(Base):
     __tablename__ = "performance_metrics"
@@ -39,6 +38,5 @@ class PerformanceMetric(Base):
     metric_name = Column(String, nullable=False)
     value = Column(Float, nullable=False)
     timestamp = Column(DateTime, default=datetime.utcnow)
-
     video = relationship("Video", back_populates="metrics")
-    athlete = relationship("Athlete", back_populates="metrics")
+    athlete = relationship("Athlete")

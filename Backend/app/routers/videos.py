@@ -1,6 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException , BackgroundTasks
 from sqlalchemy.orm import Session
 from typing import List
+from app import models
 from .. import schemas, crud, database
 
 router = APIRouter()
@@ -28,3 +29,13 @@ async def upload_video(
 @router.get("/", response_model=List[schemas.Video])
 def list_videos(db: Session = Depends(get_db)):
     return crud.get_videos(db)
+
+@router.delete("/{video_id}")
+def delete_video(video_id: str, db: Session = Depends(get_db)):
+    video = db.query(models.Video).filter(models.Video.id == video_id).first()
+    if not video:
+        raise HTTPException(status_code=404, detail="Video not found")
+
+    db.delete(video)
+    db.commit()
+    return {"message": "Video deleted"}

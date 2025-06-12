@@ -2,51 +2,64 @@ from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
 
-class AthleteBase(BaseModel):
-    name: str
-    sport: str
-    age: int
+class PerformanceMetricBase(BaseModel):
+    metric_name: str
+    value: float
 
-class AthleteCreate(AthleteBase):
+
+class PerformanceMetricCreate(PerformanceMetricBase):
+    athlete_id: str
+    video_id: str
+
+
+class PerformanceMetricUpdate(PerformanceMetricBase):
     pass
 
-class Athlete(AthleteBase):
+
+class PerformanceMetric(PerformanceMetricBase):
     id: str
-    created_at: datetime
+    timestamp: datetime
+    athlete_id: str
+    video_id: str
+
 
     class Config:
         orm_mode = True
 
 
 class VideoBase(BaseModel):
-    athlete_ids: List[str]  # list of athlete UUIDs
+    file_path: str
+    duration: Optional[float] = None
+
 
 class VideoCreate(VideoBase):
-    pass  # no extra fields — upload file via multipart/form-data
+    athlete_ids: List[str]
+
 
 class Video(VideoBase):
     id: str
-    file_path: str
     upload_date: datetime
-    duration: float
     status: str
+    metrics: List[PerformanceMetric]
 
     class Config:
         orm_mode = True
 
 
-class PerformanceMetricBase(BaseModel):
-    video_id: str
-    athlete_id: str
-    metric_name: str
-    value: float
+class AthleteBase(BaseModel):
+    name: str
+    sport: str
+    age: float
 
-class PerformanceMetricCreate(PerformanceMetricBase):
+
+class AthleteCreate(AthleteBase):
     pass
 
-class PerformanceMetric(PerformanceMetricBase):
+
+class Athlete(AthleteBase):
     id: str
-    timestamp: datetime
+    created_at: datetime
+    videos: List[Video]
 
     class Config:
         orm_mode = True
@@ -66,6 +79,8 @@ class DashboardVideo(BaseModel):
     upload_date: datetime
     status: str
     duration: float
+    metrics: List[PerformanceMetric]
+
 
     class Config:
         orm_mode = True

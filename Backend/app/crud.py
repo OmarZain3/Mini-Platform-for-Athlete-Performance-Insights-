@@ -95,8 +95,7 @@ def get_dashboard_data(db: Session, sport: Optional[str] = None, from_date: Opti
     athletes = query.all()
 
     result = []
-    for athlete in athletes:
-        # Filter videos by date range if needed
+    for athlete in athletes:    
         videos = athlete.videos
         if from_date or to_date:
             videos = [
@@ -120,7 +119,7 @@ def get_dashboard_data(db: Session, sport: Optional[str] = None, from_date: Opti
     return result
 
 def complete_video_processing(db: Session, video_id: str, delay: int = 10):
-    time.sleep(delay)  # simulate processing time
+    time.sleep(delay) 
     video = db.query(models.Video).filter(models.Video.id == video_id).first()
     if video:
         video.status = "Complete"
